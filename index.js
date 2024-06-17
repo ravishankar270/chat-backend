@@ -117,7 +117,12 @@ mongoose
           );
 
           // const data = await chatMessage.save();
-          socket.emit("message", data.messages[data.messages.length - 1]);
+          socket.emit(
+            "message",
+            data.messages.length === 1
+              ? data
+              : data.messages[data.messages.length - 1]
+          );
           io.to(socketId).emit(
             "message",
             data.messages[data.messages.length - 1]
