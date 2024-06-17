@@ -121,11 +121,23 @@ mongoose
             "message",
             data.messages.length === 1
               ? data
-              : data.messages[data.messages.length - 1]
+              : {
+                  msgInfo: data.messages[data.messages.length - 1],
+                  id: data._id,
+                  participant1:data.participant1,
+                  participant2:data.participant2
+                }
           );
           io.to(socketId).emit(
             "message",
-            data.messages[data.messages.length - 1]
+            data.messages.length === 1
+              ? data
+              : {
+                  msgInfo: data.messages[data.messages.length - 1],
+                  id: data._id,
+                  participant1:data.participant1,
+                  participant2:data.participant2
+                }
           );
           io.to(socketId).emit("message_added", {
             read: data.unread,
@@ -155,14 +167,13 @@ mongoose
           }
         );
         if (data.modifiedCount === 1) {
-          console.log("inside");
           socket.emit("updated_unread", receiver);
         }
       });
 
       // Listen for activity
-      socket.on("activity", (name) => {
-        socket.broadcast.emit("activity", name);
+      socket.on("activity", ({ name, socketId, sender }) => {
+        io.to(socketId).emit("activity", { name, sender });
       });
       // When user disconnects - to all others
       socket.on("disconnect", handleLogout);
