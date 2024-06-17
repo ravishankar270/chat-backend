@@ -16,7 +16,7 @@ const corsOptions = {
   credentials: true,
   origin:
     process.env.NODE_ENV === "production"
-      ? false
+      ? ["https://chatitnow24.netlify.app"]
       : ["http://localhost:3000", "http://127.0.0.1:5500"],
 };
 app.use(cors(corsOptions));
@@ -45,7 +45,7 @@ mongoose
       cors: {
         origin:
           process.env.NODE_ENV === "production"
-            ? false
+            ? ["https://chatitnow24.netlify.app"]
             : ["http://localhost:3000", "http://127.0.0.1:5500"],
       },
     });
